@@ -30,7 +30,7 @@ const StepCard = ({ number, title, description, index }) => {
 
   return (
     <motion.div
-      className="bg-gradient-to-b from-pink-50 to-white rounded-xl p-6 relative shadow-lg hover:shadow-xl transition-shadow duration-300"
+      className="bg-gradient-to-b from-pink-50 to-white rounded-xl p-[3rem] relative shadow-lg hover:shadow-xl transition-shadow duration-300"
       variants={cardVariants}
       whileHover={{ y: -5 }}
     >
