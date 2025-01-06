@@ -52,7 +52,7 @@ const LoadingScreen = ({ onLoadingComplete }) => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.2 }}
-                  className="inline-block mx-2 bg-clip-text text-transparent bg-gradient-to-r from-red-600 via-blue-600 to-red-600"
+                  className="inline-block mx-2 bg-clip-text text-transparent bg-gradient-to-r from-red-600 via-red-600 to-red-600"
                 >
                   {word}
                 </motion.span>
