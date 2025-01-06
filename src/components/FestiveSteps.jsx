@@ -143,7 +143,7 @@ const FestiveSteps = () => {
             whileTap={{ scale: 0.95 }}
           >
            <Link to ="/register">
-            Registrar Now!
+           I'm interested 
             </Link>
           </motion.button>
         </motion.div>
