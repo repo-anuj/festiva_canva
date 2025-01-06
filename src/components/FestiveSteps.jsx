@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const StepCard = ({ number, title, description, index }) => {
   const cardVariants = {
@@ -141,7 +142,9 @@ const FestiveSteps = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Sign Up Now!
+           <Link to ="/register">
+            Registrar Now!
+            </Link>
           </motion.button>
         </motion.div>
       </motion.div>
