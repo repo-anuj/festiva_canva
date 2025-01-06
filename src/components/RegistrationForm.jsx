@@ -79,7 +79,7 @@ const RegistrationForm = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            Creating Festive Impressions For Your Business
+            Crafting Memorable Celebrations for Your Business
           </motion.p>
         </div>
 
