@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import logo from "./logo.png" 
 import img1 from "./img1.png" 
 import img2 from "./img2.png"
+import { Link } from 'react-router-dom';
 
 const FestiveLanding = () => {
   // Animation variants
@@ -78,7 +79,9 @@ const FestiveLanding = () => {
               whileTap={{ scale: 0.95 }}
               variants={fadeIn}
             >
-              Sign Up
+            <Link to ="/register">
+              I'm interested 
+            </Link>
             </motion.button>
           </motion.div>
 
@@ -129,8 +132,7 @@ const FestiveLanding = () => {
         >
           <h2 className="text-2xl md:text-3xl lg:text-4xl rounded-lg font-serif py-6 px-4">
             Struggling to get <span className="font-bold text-red-400">perfect</span> festival
-            <br className="hidden md:block" />
-            graphics made for your brand?
+            <br className="hidden md:block" /> graphics made for your brand?
           </h2>
         </motion.div>
       </motion.div>

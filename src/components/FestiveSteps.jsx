@@ -113,8 +113,8 @@ const FestiveSteps = () => {
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif mb-4">
             <span className="block md:inline">Festiva gives you a practical</span>{' '}
-            <br />
-            <span className="block md:inline">and easy solution in just 3 steps!</span>
+            
+            <span className="block">and easy solution in just 3 steps!</span>
           </h2>
         </motion.div>
 

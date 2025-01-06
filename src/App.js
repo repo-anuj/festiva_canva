@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import logo from "./components/logo.png" 
+import logo from "./components/logo.png";
 import FestiveLanding from './components/FestiveLanding';
 import FestiveSteps from "./components/FestiveSteps";
 import Footer from './components/Footer';
 import HowItWorks from "./components/HowItWorks";
+import RegistrationForm from './components/RegistrationForm';
 
 const LoadingScreen = () => {
   return (
@@ -100,22 +102,29 @@ function App() {
   }, []);
 
   return (
-    <div className="app relative">
-      <AnimatePresence mode="wait">
-        {loading && <LoadingScreen />}
-      </AnimatePresence>
+    <Router>
+      <div className="app relative">
+        <AnimatePresence mode="wait">
+          {loading && <LoadingScreen />}
+        </AnimatePresence>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.5 }}
-      >
-        <FestiveLanding />
-        <FestiveSteps />
-        <HowItWorks />
-        <Footer />
-      </motion.div>
-    </div>
+        <Routes>
+          <Route path="/" element={
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+            >
+              <FestiveLanding />
+              <FestiveSteps />
+              <HowItWorks />
+              <Footer />
+            </motion.div>
+          } />
+          <Route path="/register" element={<RegistrationForm />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
