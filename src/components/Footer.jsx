@@ -58,12 +58,12 @@ const Footer = () => {
             variants={itemVariants}
           >
             <motion.a 
-              href="mailto:festiva@gmail.com" 
+              href="mailto:Festivesocialgraphics@gmail.com" 
               className="flex items-center space-x-2 text-gray-700 hover:text-red-400 transition-colors group"
               whileHover={{ scale: 1.05 }}
             >
               <Mail className="w-5 h-5 group-hover:stroke-red-400" />
-              <span>festiva@gmail.com</span>
+              <span>Festivesocialgraphics@gmail.com</span>
             </motion.a>
             
             <motion.a 

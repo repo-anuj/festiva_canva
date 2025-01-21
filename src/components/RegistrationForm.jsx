@@ -4,9 +4,9 @@ import emailjs from '@emailjs/browser';
 import logo from "./logo.png" 
 
 // Initialize EmailJS with your public key
-const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY || '9dyBntyl1vQKOjDRj';
-const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID || 'service_e9vyqdh';
-const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'template_filfxih';
+const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 'mkEL7Qrq7bDfgbdeO';
+const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID || 'service_7l0c5ul';
+const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'template_khlgzjl';
 
 const RegistrationForm = () => {
   // Initialize EmailJS on component mount
@@ -31,7 +31,7 @@ const RegistrationForm = () => {
     try {
       const templateParams = {
         to_email: formData.email,
-        from_name: 'Festiva',
+        from_name: 'FestivaSocial',
         to_name: formData.name,
         phone: formData.phone,
         message: 'Thank you for registering with Festiva!'
