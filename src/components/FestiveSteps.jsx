@@ -113,7 +113,7 @@ const FestiveSteps = () => {
           variants={headerVariants}
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif mb-4">
-            <span className="block md:inline">Festiva gives you a practical</span>{' '}
+            <span className="block md:inline">Festiva Social gives you a practical</span>{' '}
             
             <span className="block">and easy solution in just 3 steps!</span>
           </h2>

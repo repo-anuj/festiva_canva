@@ -100,7 +100,7 @@ const Footer = () => {
             className="text-sm text-gray-500 text-center mt-8"
             variants={itemVariants}
           >
-            <p>© {new Date().getFullYear()} Festiva. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Festiva Soclial. All rights reserved.</p>
           </motion.div>
         </div>
       </motion.div>

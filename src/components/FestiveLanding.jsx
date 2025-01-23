@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import logo from "./logo.png" 
 import img1 from "./img1.png" 
 import img2 from "./img2.png"
-import { Link } from 'react-router-dom';
 
 const FestiveLanding = () => {
+  const [isSwapped, setIsSwapped] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsSwapped(prev => !prev);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   // Animation variants
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
@@ -87,36 +97,52 @@ const FestiveLanding = () => {
 
           {/* Right content - Festival cards */}
           <div className="relative h-[400px] md:h-[500px] lg:h-[600px]">
-            {/* Card 1 - Background card */}
+            {/* Card 1 */}
             <motion.div 
-              className="absolute right-0 top-0 w-[80%] md:w-[25rem] h-[90%] md:h-[26rem] transform translate-x-4 md:translate-x-8"
-              variants={fadeIn}
+              className={`absolute w-[80%] md:w-[25rem] h-[90%] md:h-[26rem] transform ${
+                isSwapped 
+                  ? "left-0 bottom-0 -translate-x-2 md:-translate-x-4"
+                  : "right-0 top-0 translate-x-4 md:translate-x-8"
+              }`}
+              animate={{ 
+                x: isSwapped ? [100, -50] : [0, 50],
+                y: isSwapped ? [0, 50] : [20, 0],
+                transition: { 
+                  duration: 0.5,
+                  ease: "easeInOut"
+                }
+              }}
               whileHover="hover"
-              variant={cardAnimation}
-              initial={{ x: 100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              variants={cardAnimation}
             >
               <img
                 src={img1}
-                alt="Festival Card 2"
+                alt="Festival Card 1"
                 className="w-full h-full object-contain rounded-lg"
               />
             </motion.div>
 
-            {/* Card 2 - Foreground card */}
+            {/* Card 2 */}
             <motion.div 
-              className="absolute left-0 bottom-0 w-[80%] md:w-[25rem] h-[90%] md:h-[26rem] transform -translate-x-2 md:-translate-x-4"
-              variants={fadeIn}
+              className={`absolute w-[80%] md:w-[25rem] h-[90%] md:h-[26rem] transform ${
+                isSwapped 
+                  ? "right-0 top-0 translate-x-4 md:translate-x-8"
+                  : "left-0 bottom-0 -translate-x-2 md:-translate-x-4"
+              }`}
+              animate={{ 
+                x: isSwapped ? [-100, 50] : [0, -50],
+                y: isSwapped ? [0, -50] : [20, 0],
+                transition: { 
+                  duration: 0.5,
+                  ease: "easeInOut"
+                }
+              }}
               whileHover="hover"
-              variant={cardAnimation}
-              initial={{ x: -100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
+              variants={cardAnimation}
             >
               <img
                 src={img2}
-                alt="Festival Card 1"
+                alt="Festival Card 2"
                 className="w-full h-full object-contain rounded-lg"
               />
             </motion.div>
