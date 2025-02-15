@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import logo from "./logo.png" 
-import img1 from "./img1.png" 
+import logo from "./logo.png"
+import img1 from "./img1.png"
 import img2 from "./img2.png"
 
 const FestiveLanding = () => {
@@ -11,22 +11,13 @@ const FestiveLanding = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setIsSwapped(prev => !prev);
-    }, 3000);
-
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
-  // Animation variants
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
-  };
-
-  const cardAnimation = {
-    hover: { 
-      scale: 1.05,
-      transition: { duration: 0.3 }
-    }
   };
 
   const containerAnimation = {
@@ -36,6 +27,55 @@ const FestiveLanding = () => {
       transition: {
         delayChildren: 0.3,
         staggerChildren: 0.2
+      }
+    }
+  };
+
+  // Adjusted card positions for closer proximity
+  const card1Positions = {
+    initial: {
+      left: "5%",
+      bottom: "0%",
+      translateX: "0%",
+      zIndex: 1
+    },
+    swapped: {
+      left: "50%",
+      top: "0%",
+      translateX: "0%",
+      zIndex: 2
+    }
+  };
+
+  const card2Positions = {
+    initial: {
+      left: "50%",
+      top: "0%",
+      translateX: "0%",
+      zIndex: 2
+    },
+    swapped: {
+      left: "5%",
+      bottom: "0%",
+      translateX: "0%",
+      zIndex: 1
+    }
+  };
+
+  // Enhanced card animations with swapping
+  const cardAnimationBase = {
+    y: [0, -10, 0],
+    rotate: [-1, 1, -1],
+    transition: {
+      y: {
+        repeat: Infinity,
+        duration: 4,
+        ease: "easeInOut"
+      },
+      rotate: {
+        repeat: Infinity,
+        duration: 6,
+        ease: "easeInOut"
       }
     }
   };
@@ -84,68 +124,70 @@ const FestiveLanding = () => {
             </motion.p>
             
             <motion.button 
-              className="bg-red-400 text-white px-8 py-3 rounded-full hover:bg-red-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              className="bg-red-400 text-white px-8 py-3 rounded-full hover:bg-red-500 transition-all duration-300 transform hover:shadow-xl"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               variants={fadeIn}
             >
-            <Link to ="/register">
-              I'm interested 
-            </Link>
+              <Link to="/register">
+                I'm interested 
+              </Link>
             </motion.button>
           </motion.div>
 
-          {/* Right content - Festival cards */}
-          <div className="relative h-[400px] md:h-[500px] lg:h-[600px]">
-            {/* Card 1 */}
-            <motion.div 
-              className={`absolute w-[80%] md:w-[25rem] h-[90%] md:h-[26rem] transform ${
-                isSwapped 
-                  ? "left-0 bottom-0 -translate-x-2 md:-translate-x-4"
-                  : "right-0 top-0 translate-x-4 md:translate-x-8"
-              }`}
-              animate={{ 
-                x: isSwapped ? [100, -50] : [0, 50],
-                y: isSwapped ? [0, 50] : [20, 0],
-                transition: { 
-                  duration: 0.5,
-                  ease: "easeInOut"
-                }
-              }}
-              whileHover="hover"
-              variants={cardAnimation}
-            >
-              <img
-                src={img1}
-                alt="Festival Card 1"
-                className="w-full h-full object-contain rounded-lg"
-              />
-            </motion.div>
+          {/* Right content - Festival cards with closer positioning */}
+          <div className="relative h-[400px] md:h-[400px] lg:h-[600px] right-[44px]">
+            <AnimatePresence>
+              {/* Card 1 */}
+              <motion.div 
+                className="absolute w-[70%] md:w-[20rem] h-[90%] md:h-[26rem]"
+                initial={card1Positions.initial}
+                animate={{
+                  ...(!isSwapped ? card1Positions.initial : card1Positions.swapped),
+                  ...cardAnimationBase
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20,
+                  duration: 1
+                }}
+                style={{ filter: 'drop-shadow(0px 10px 20px rgba(0,0,0,0.15))' }}
+              >
+                <motion.img
+                  src={img1}
+                  alt="Festival Card 1"
+                  className="w-full h-full object-contain rounded-lg"
+                  animate={{ opacity: [0.8, 1] }}
+                  transition={{ duration: 1, ease: "easeInOut" }}
+                />
+              </motion.div>
 
-            {/* Card 2 */}
-            <motion.div 
-              className={`absolute w-[80%] md:w-[25rem] h-[90%] md:h-[26rem] transform ${
-                isSwapped 
-                  ? "right-0 top-0 translate-x-4 md:translate-x-8"
-                  : "left-0 bottom-0 -translate-x-2 md:-translate-x-4"
-              }`}
-              animate={{ 
-                x: isSwapped ? [-100, 50] : [0, -50],
-                y: isSwapped ? [0, -50] : [20, 0],
-                transition: { 
-                  duration: 0.5,
-                  ease: "easeInOut"
-                }
-              }}
-              whileHover="hover"
-              variants={cardAnimation}
-            >
-              <img
-                src={img2}
-                alt="Festival Card 2"
-                className="w-full h-full object-contain rounded-lg"
-              />
-            </motion.div>
+              {/* Card 2 */}
+              <motion.div 
+                className="absolute w-[70%] md:w-[20rem] h-[90%] md:h-[26rem]"
+                initial={card2Positions.initial}
+                animate={{
+                  ...(!isSwapped ? card2Positions.initial : card2Positions.swapped),
+                  ...cardAnimationBase
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20,
+                  duration: 1
+                }}
+                style={{ filter: 'drop-shadow(0px 10px 20px rgba(0,0,0,0.15))' }}
+              >
+                <motion.img
+                  src={img2}
+                  alt="Festival Card 2"
+                  className="w-full h-full object-contain rounded-lg"
+                  animate={{ opacity: [0.8, 1] }}
+                  transition={{ duration: 1, ease: "easeInOut" }}
+                />
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
 
