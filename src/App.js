@@ -7,6 +7,7 @@ import FestiveSteps from './components/FestiveSteps';
 import HowItWorks from './components/HowItWorks';
 import Footer from './components/Footer';
 import RegistrationForm from './components/RegistrationForm';
+import FestivaGallery from './components/FestivaGallery';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -42,6 +43,7 @@ const App = () => {
                 }
               />
               <Route path="/register" element={<RegistrationForm />} />
+              <Route path="/gallery" element={<FestivaGallery />} />
             </Routes>
           )}
         </AnimatePresence>
