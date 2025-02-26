@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Download, X, Clock as Click } from 'lucide-react';
-import img1 from "./img1.png"
-import img2 from "./img2.png"
-import logo from "./logo.png"
+import img1 from "./img1.png";
+import img2 from "./img2.png";
+import logo from "./logo.png";
 
 const FestivaGallery = () => {
   const [selectedImage, setSelectedImage] = useState(null);
-
   const images = [
     {
       id: 1,
@@ -54,8 +53,7 @@ const FestivaGallery = () => {
     <div className="min-h-screen bg-pink-50">
       {/* Header with Logo */}
       <div className="max-w-7xl mx-auto px-4 pt-6 mb-12">
-        <div className=" items-end">
-          <div className="w-24"></div> {/* Spacer for balance */}
+        <div className="flex items-end justify-center">
           <div className="w-24 h-24">
             <img 
               src={logo}
@@ -94,19 +92,14 @@ const FestivaGallery = () => {
                   className="w-full h-full object-cover"
                 />
                 
-                {/* Hover Overlay */}
-                <div className="absolute inset-0 bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  {/* <Click className="w-8 h-8 text-white animate-bounce" /> */}
-                </div>
-
                 {/* Selection Overlay */}
                 {selectedImage === image.id && (
                   <div className="absolute inset-0 bg-black bg-opacity-60 transition-all flex flex-col items-center justify-center">
                     <button 
                       onClick={(e) => handleDownload(image.id, e)}
-                      className="mb-2 px-6 py-2 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-all duration-200 flex items-center gap-2 hover:scale-105"
+                      className="mb-2 px-4 py-2 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-all duration-200 flex items-center gap-2 hover:scale-105 text-sm sm:text-base md:text-lg lg:text-xl"
                     >
-                      <Download className="w-4 h-4" />
+                      <Download className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                       <span>Download Now</span>
                     </button>
                     
@@ -121,10 +114,11 @@ const FestivaGallery = () => {
                     </button>
                   </div>
                 )}
-              </div>
 
-              {/* Image Label */}
-              <div className="absolute bottom-2 left-2 right-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {/* Click to Download Label */}
+                <div className="absolute bottom-2 right-2 bg-pink-500 text-white text-xs sm:text-sm md:text-base px-2 py-1 rounded-md transition-opacity duration-300">
+                  Click to Download
+                </div>
               </div>
             </div>
           ))}
@@ -143,7 +137,7 @@ const FestivaGallery = () => {
               </p>
               <p className="flex items-center justify-center gap-2">
                 <span className="w-6 h-6 rounded-full bg-pink-100 flex items-center justify-center text-pink-500">2</span>
-                Click the Download button to buy you design 
+                Click the Download button to buy your design 
               </p>
             </div>
           </div>
