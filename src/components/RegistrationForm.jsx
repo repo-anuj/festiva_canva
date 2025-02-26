@@ -1,12 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
-import logo from "./logo.png" 
+import logo from "./logo.png";
+import RegistrationSuccess from './RegistrationSuccess';
 
 // Initialize EmailJS with your public key
 const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 'mkEL7Qrq7bDfgbdeO';
 const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID || 'service_7l0c5ul';
 const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'template_khlgzjl';
+
+// Business category options
+const BUSINESS_CATEGORIES = [
+  "IT & Software Services",
+  "Retail & E-commerce",
+  "Manufacturing",
+  "Healthcare & Pharmaceuticals",
+  "Education & Training",
+  "Food & Beverage",
+  "Real Estate & Construction",
+  "Financial Services",
+  "Travel & Hospitality",
+  "Media & Entertainment",
+  "Other"
+];
+
+// Indian states
+const INDIAN_STATES = [
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", 
+  "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", 
+  "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", 
+  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", 
+  "Uttarakhand", "West Bengal", "Delhi", "Jammu and Kashmir", "Ladakh", 
+  "Puducherry", "Lakshadweep", "Chandigarh", "Andaman and Nicobar Islands", 
+  "Dadra and Nagar Haveli and Daman and Diu"
+];
 
 const RegistrationForm = () => {
   // Initialize EmailJS on component mount
@@ -15,26 +42,117 @@ const RegistrationForm = () => {
   }, []);
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: ''
+    companyName: '',
+    companyContact: '',
+    website: '',
+    businessCategory: '',
+    logo: null,
+    street: '',
+    city: '',
+    state: '',
+    pincode: '',
+    contactPersonName: '',
+    contactPersonWhatsapp: ''
   });
   
+  const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [logoPreview, setLogoPreview] = useState(null);
+
+  // If registration is successful, show success screen
+  if (submitStatus === 'success') {
+    return <RegistrationSuccess />;
+  }
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    // Company name validation
+    if (!formData.companyName.trim()) {
+      newErrors.companyName = "Company name is required";
+    }
+    
+    // Company contact validation
+    if (!formData.companyContact.trim()) {
+      newErrors.companyContact = "Company contact number is required";
+    } else if (!/^[0-9]{10,12}$|^\+?[0-9]{1,3}-[0-9]{10}$|^[0-9]{3,5}-[0-9]{6,8}$/.test(formData.companyContact.replace(/\s/g, ''))) {
+      newErrors.companyContact = "Please enter a valid Indian phone number";
+    }
+    
+    // Website validation (optional field)
+    if (formData.website && !/^(https?:\/\/)?(www\.)?[a-zA-Z0-9]+([-.][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}(\/.*)?$/.test(formData.website)) {
+      newErrors.website = "Please enter a valid website URL";
+    }
+    
+    // Business category validation
+    if (!formData.businessCategory) {
+      newErrors.businessCategory = "Please select a business category";
+    }
+    
+    // Address validation
+    if (!formData.street.trim()) {
+      newErrors.street = "Street address is required";
+    }
+    
+    if (!formData.city.trim()) {
+      newErrors.city = "City is required";
+    } else if (!/^[a-zA-Z\s]+$/.test(formData.city)) {
+      newErrors.city = "City should contain only letters";
+    }
+    
+    if (!formData.state) {
+      newErrors.state = "Please select a state";
+    }
+    
+    if (!formData.pincode.trim()) {
+      newErrors.pincode = "PIN code is required";
+    } else if (!/^[1-9][0-9]{5}$/.test(formData.pincode)) {
+      newErrors.pincode = "PIN code must be 6 digits and start with a non-zero digit";
+    }
+    
+    // Contact person validation
+    if (!formData.contactPersonName.trim()) {
+      newErrors.contactPersonName = "Contact person name is required";
+    }
+    
+    if (!formData.contactPersonWhatsapp.trim()) {
+      newErrors.contactPersonWhatsapp = "WhatsApp number is required";
+    } else if (!/^[6-9][0-9]{9}$/.test(formData.contactPersonWhatsapp)) {
+      newErrors.contactPersonWhatsapp = "Please enter a valid 10-digit Indian mobile number";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      // Scroll to the first error
+      const firstErrorField = document.querySelector('.error-message');
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+    
     setIsSubmitting(true);
     setSubmitStatus(null);
     
     try {
+      // In a real implementation, you would handle file upload separately
+      // For now, we'll just simulate the process
+      
       const templateParams = {
-        to_email: formData.email,
+        to_email: formData.contactPersonWhatsapp + '@c.us', // WhatsApp email gateway format
         from_name: 'FestivaSocial',
-        to_name: formData.name,
-        phone: formData.phone,
-        message: 'Thank you for registering with Festiva!'
+        to_name: formData.contactPersonName,
+        company_name: formData.companyName,
+        company_contact: formData.companyContact,
+        address: `${formData.street}, ${formData.city}, ${formData.state} - ${formData.pincode}`,
+        message: 'Thank you for registering with Festiva! We will be in touch shortly.'
       };
 
       const response = await emailjs.send(
@@ -45,7 +163,7 @@ const RegistrationForm = () => {
 
       if (response.status === 200) {
         setSubmitStatus('success');
-        setFormData({ name: '', email: '', phone: '' });
+        // Form reset moved to success component
       } else {
         setSubmitStatus('error');
       }
@@ -63,6 +181,59 @@ const RegistrationForm = () => {
       ...prevData,
       [name]: value
     }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: ''
+      });
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check if file is PNG or JPEG and under 5MB
+      const validTypes = ['image/png', 'image/jpeg'];
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      
+      if (!validTypes.includes(file.type)) {
+        setErrors({
+          ...errors,
+          logo: "Please upload PNG or JPEG image only"
+        });
+        return;
+      }
+      
+      if (file.size > maxSize) {
+        setErrors({
+          ...errors,
+          logo: "File size should be less than 5MB"
+        });
+        return;
+      }
+      
+      setFormData(prevData => ({
+        ...prevData,
+        logo: file
+      }));
+      
+      // Clear logo error
+      if (errors.logo) {
+        setErrors({
+          ...errors,
+          logo: ''
+        });
+      }
+      
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // Animation variants for Framer Motion
@@ -81,24 +252,30 @@ const RegistrationForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-pink-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-pink-100 to-white flex items-center justify-center px-4 py-12 font-['Inter']">
       <motion.div 
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="w-full max-w-md"
+        className="w-full max-w-2xl"
       >
         {/* Header Section */}
-        <div className="text-center mb-8">
-          <motion.h1
+        <div className="text-center mb-8 animate-slide-up">
+          <motion.div
             variants={fadeIn}
-            className="text-3xl font-bold text-gray-800 mb-2"
+            className="mb-2"
           >
            <img 
-              src={logo} // Make sure to add your logo file to the public folder
+              src={logo}
               alt="Festiva Logo"
-              className="h-12 mx-auto"
+              className="h-16 mx-auto"
             />
+          </motion.div>
+          <motion.h1 
+            variants={fadeIn}
+            className="text-2xl font-bold text-[var(--text-dark)] mb-2 font-['Playfair_Display']"
+          >
+            Business Registration
           </motion.h1>
           <motion.p 
             variants={fadeIn}
@@ -111,19 +288,9 @@ const RegistrationForm = () => {
         {/* Form Section */}
         <motion.form 
           onSubmit={handleSubmit}
-          className="bg-white rounded-lg shadow-lg p-8"
+          className="bg-white rounded-lg shadow-lg p-8 animate-fade-in"
         >
-          {/* Status Messages */}
-          {submitStatus === 'success' && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mb-6 p-4 bg-green-100 text-green-700 rounded-md"
-            >
-              Registration successful! Please check your email for confirmation.
-            </motion.div>
-          )}
-
+          {/* Error Message */}
           {submitStatus === 'error' && (
             <motion.div 
               initial={{ opacity: 0 }}
@@ -135,64 +302,280 @@ const RegistrationForm = () => {
           )}
 
           <div className="space-y-6">
-            {/* Name Field */}
+            <h2 className="text-xl font-medium text-[var(--text-dark)] mb-4 font-['Playfair_Display']">Business Information</h2>
+            
+            {/* Company Name Field */}
             <div>
               <label 
-                htmlFor="name" 
+                htmlFor="companyName" 
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Full Name
+                Company Name<span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
-                id="name"
-                name="name"
-                value={formData.name}
+                id="companyName"
+                name="companyName"
+                value={formData.companyName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-300 focus:border-pink-300 transition"
-                placeholder="Enter your full name"
+                className={`w-full px-4 py-2 border ${errors.companyName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
+                placeholder="Enter your company name"
               />
+              {errors.companyName && <p className="mt-1 text-sm text-red-500 error-message">{errors.companyName}</p>}
             </div>
 
-            {/* Email Field */}
-            <div>
-              <label 
-                htmlFor="email" 
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-300 focus:border-pink-300 transition"
-                placeholder="Enter your email"
-              />
+            {/* Two Column Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Company Contact Field */}
+              <div>
+                <label 
+                  htmlFor="companyContact" 
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Company Contact Number<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  id="companyContact"
+                  name="companyContact"
+                  value={formData.companyContact}
+                  onChange={handleChange}
+                  required
+                  className={`w-full px-4 py-2 border ${errors.companyContact ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
+                  placeholder="e.g., 022-27856789"
+                />
+                {errors.companyContact && <p className="mt-1 text-sm text-red-500 error-message">{errors.companyContact}</p>}
+              </div>
+
+              {/* Website Field */}
+              <div>
+                <label 
+                  htmlFor="website" 
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Website
+                </label>
+                <input
+                  type="url"
+                  id="website"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-2 border ${errors.website ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
+                  placeholder="e.g., www.yourcompany.com"
+                />
+                {errors.website && <p className="mt-1 text-sm text-red-500 error-message">{errors.website}</p>}
+              </div>
             </div>
 
-            {/* Phone Field */}
+            {/* Rest of form remains unchanged */}
+            {/* Business Category Field */}
             <div>
               <label 
-                htmlFor="phone" 
+                htmlFor="businessCategory" 
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Phone Number
+                Business Category<span className="text-red-500">*</span>
               </label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
+              <select
+                id="businessCategory"
+                name="businessCategory"
+                value={formData.businessCategory}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-300 focus:border-pink-300 transition"
-                placeholder="Enter your phone number"
+                className={`w-full px-4 py-2 border ${errors.businessCategory ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
+              >
+                <option value="" disabled>Select your business category</option>
+                {BUSINESS_CATEGORIES.map((category) => (
+                  <option key={category} value={category}>{category}</option>
+                ))}
+              </select>
+              {errors.businessCategory && <p className="mt-1 text-sm text-red-500 error-message">{errors.businessCategory}</p>}
+            </div>
+
+            {/* Logo Upload Field */}
+            <div>
+              <label 
+                htmlFor="logo" 
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Company Logo (PNG without background preferred)
+              </label>
+              <div className="mt-1 flex items-center">
+                <input
+                  type="file"
+                  id="logo"
+                  name="logo"
+                  accept="image/png, image/jpeg"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+                <label
+                  htmlFor="logo"
+                  className="cursor-pointer bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary-color)]"
+                >
+                  Upload Logo
+                </label>
+                {logoPreview && (
+                  <div className="ml-4 h-12 w-12 overflow-hidden rounded-md">
+                    <img src={logoPreview} alt="Logo Preview" className="h-full w-full object-cover" />
+                  </div>
+                )}
+              </div>
+              {errors.logo && <p className="mt-1 text-sm text-red-500 error-message">{errors.logo}</p>}
+              <p className="mt-1 text-xs text-gray-500">
+                Note: Please upload image without background (PNG). 
+                <a href="https://www.remove.bg/" target="_blank" rel="noopener noreferrer" className="text-[var(--primary-color)] hover:underline ml-1">
+                  If there is no logo, click here to make one.
+                </a>
+              </p>
+            </div>
+
+            {/* Address Section */}
+            <h2 className="text-xl font-medium text-[var(--text-dark)] mt-6 mb-4 font-['Playfair_Display']">Business Address</h2>
+            
+            {/* Street Field */}
+            <div>
+              <label 
+                htmlFor="street" 
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Street/Locality<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="street"
+                name="street"
+                value={formData.street}
+                onChange={handleChange}
+                required
+                className={`w-full px-4 py-2 border ${errors.street ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
+                placeholder="e.g., 123, Sector 5, Vashi"
               />
+              {errors.street && <p className="mt-1 text-sm text-red-500 error-message">{errors.street}</p>}
+            </div>
+
+            {/* City, State, and Pincode in a row */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* City Field */}
+              <div>
+                <label 
+                  htmlFor="city" 
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  City<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  required
+                  className={`w-full px-4 py-2 border ${errors.city ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
+                  placeholder="e.g., Mumbai"
+                />
+                {errors.city && <p className="mt-1 text-sm text-red-500 error-message">{errors.city}</p>}
+              </div>
+
+              {/* State Field */}
+              <div>
+                <label 
+                  htmlFor="state" 
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  State<span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="state"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  required
+                  className={`w-full px-4 py-2 border ${errors.state ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
+                >
+                  <option value="" disabled>Select State</option>
+                  {INDIAN_STATES.map((state) => (
+                    <option key={state} value={state}>{state}</option>
+                  ))}
+                </select>
+                {errors.state && <p className="mt-1 text-sm text-red-500 error-message">{errors.state}</p>}
+              </div>
+
+              {/* Pincode Field */}
+              <div>
+                <label 
+                  htmlFor="pincode" 
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  PIN Code<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="pincode"
+                  name="pincode"
+                  value={formData.pincode}
+                  onChange={handleChange}
+                  required
+                  maxLength="6"
+                  className={`w-full px-4 py-2 border ${errors.pincode ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
+                  placeholder="e.g., 400703"
+                />
+                {errors.pincode && <p className="mt-1 text-sm text-red-500 error-message">{errors.pincode}</p>}
+              </div>
+            </div>
+
+            {/* Contact Person Section */}
+            <h2 className="text-xl font-medium text-[var(--text-dark)] mt-6 mb-4 font-['Playfair_Display']">Contact Person Details</h2>
+            
+            {/* Two Column Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Contact Person Name Field */}
+              <div>
+                <label 
+                  htmlFor="contactPersonName" 
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Contact Person Name<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="contactPersonName"
+                  name="contactPersonName"
+                  value={formData.contactPersonName}
+                  onChange={handleChange}
+                  required
+                  className={`w-full px-4 py-2 border ${errors.contactPersonName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
+                  placeholder="e.g., Rajesh Sharma"
+                />
+                {errors.contactPersonName && <p className="mt-1 text-sm text-red-500 error-message">{errors.contactPersonName}</p>}
+              </div>
+
+              {/* Contact Person WhatsApp Field */}
+              <div>
+                <label 
+                  htmlFor="contactPersonWhatsapp" 
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Contact Person WhatsApp Number<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  id="contactPersonWhatsapp"
+                  name="contactPersonWhatsapp"
+                  value={formData.contactPersonWhatsapp}
+                  onChange={handleChange}
+                  required
+                  maxLength="10"
+                  className={`w-full px-4 py-2 border ${errors.contactPersonWhatsapp ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
+                  placeholder="e.g., 9876543210"
+                />
+                {errors.contactPersonWhatsapp && <p className="mt-1 text-sm text-red-500 error-message">{errors.contactPersonWhatsapp}</p>}
+                <p className="mt-1 text-xs text-gray-500">
+                  We'll connect with you via WhatsApp for faster communication.
+                </p>
+              </div>
             </div>
 
             {/* Submit Button */}
@@ -202,8 +585,8 @@ const RegistrationForm = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={`
-                w-full bg-[#ff7b7b] text-white py-3 px-6 rounded-md 
-                hover:bg-[#ff6b6b] transition duration-200 font-medium
+                w-full bg-[#ef4444] text-white py-3 px-6 rounded-full hover:bg-[#ef3333]
+                transition duration-200 font-medium mt-6 
                 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}
               `}
             >
@@ -215,9 +598,9 @@ const RegistrationForm = () => {
         {/* Footer Text */}
         <motion.p 
           variants={fadeIn}
-          className="text-center mt-4 text-sm text-gray-600"
+          className="text-center mt-4 text-sm text-gray-600 animate-fade-in"
         >
-          Hassle Free. Beautiful.
+          Hassle Free. Beautiful. Memorable.
         </motion.p>
       </motion.div>
     </div>
