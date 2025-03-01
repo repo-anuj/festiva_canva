@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import logo from "./logo.png";
 import RegistrationSuccess from './RegistrationSuccess';
+import RegistrationConfirmation from './RegistrationConfirmation';
 
 // Initialize EmailJS with your public key
 const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 'mkEL7Qrq7bDfgbdeO';
@@ -59,6 +60,19 @@ const RegistrationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  // If confirmation is shown
+  // if (showConfirmation) {
+  //   return (
+  //     <RegistrationConfirmation 
+  //       formData={formData} 
+  //       logoPreview={logoPreview} 
+  //       onConfirm={handleConfirmSubmit} 
+  //       onEdit={() => setShowConfirmation(false)}
+  //     />
+  //   );
+  // }
 
   // If registration is successful, show success screen
   if (submitStatus === 'success') {
@@ -138,6 +152,12 @@ const RegistrationForm = () => {
       return;
     }
     
+    // Show confirmation screen instead of submitting directly
+    setShowConfirmation(true);
+  };
+
+  // New function to handle final submission after confirmation
+  const handleConfirmSubmit = async () => {
     setIsSubmitting(true);
     setSubmitStatus(null);
     
@@ -166,14 +186,28 @@ const RegistrationForm = () => {
         // Form reset moved to success component
       } else {
         setSubmitStatus('error');
+        setShowConfirmation(false);
       }
     } catch (error) {
       console.error('Error sending email:', error);
       setSubmitStatus('error');
+      setShowConfirmation(false);
     } finally {
       setIsSubmitting(false);
     }
   };
+
+   // If confirmation is shown
+   if (showConfirmation) {
+    return (
+      <RegistrationConfirmation 
+        formData={formData} 
+        logoPreview={logoPreview} 
+        onConfirm={handleConfirmSubmit} 
+        onEdit={() => setShowConfirmation(false)}
+      />
+    );
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -283,6 +317,12 @@ const RegistrationForm = () => {
           >
             Crafting Memorable Celebrations for Your Business
           </motion.p>
+          <motion.p 
+            variants={fadeIn}
+            className="text-gray-600 mt-2 text-sm italic"
+          >
+            Note: This information will be used in your designs, please enter accurate details.
+          </motion.p>
         </div>
 
         {/* Form Section */}
@@ -320,7 +360,7 @@ const RegistrationForm = () => {
                 onChange={handleChange}
                 required
                 className={`w-full px-4 py-2 border ${errors.companyName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                placeholder="Enter your company name"
+                placeholder="Enter your company name (this will be used in your design)"
               />
               {errors.companyName && <p className="mt-1 text-sm text-red-500 error-message">{errors.companyName}</p>}
             </div>
@@ -343,7 +383,7 @@ const RegistrationForm = () => {
                   onChange={handleChange}
                   required
                   className={`w-full px-4 py-2 border ${errors.companyContact ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                  placeholder="e.g., 022-27856789"
+                  placeholder="e.g., 022-27856789 (will be used in design)"
                 />
                 {errors.companyContact && <p className="mt-1 text-sm text-red-500 error-message">{errors.companyContact}</p>}
               </div>
@@ -363,13 +403,12 @@ const RegistrationForm = () => {
                   value={formData.website}
                   onChange={handleChange}
                   className={`w-full px-4 py-2 border ${errors.website ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                  placeholder="e.g., www.yourcompany.com"
+                  placeholder="e.g., www.yourcompany.com (will be used in design)"
                 />
                 {errors.website && <p className="mt-1 text-sm text-red-500 error-message">{errors.website}</p>}
               </div>
             </div>
 
-            {/* Rest of form remains unchanged */}
             {/* Business Category Field */}
             <div>
               <label 
@@ -425,9 +464,9 @@ const RegistrationForm = () => {
               </div>
               {errors.logo && <p className="mt-1 text-sm text-red-500 error-message">{errors.logo}</p>}
               <p className="mt-1 text-xs text-gray-500">
-                Note: Please upload image without background (PNG). 
+                Note: Please upload image without background (PNG). This logo will be featured in your designs.
                 <a href="https://www.remove.bg/" target="_blank" rel="noopener noreferrer" className="text-[var(--primary-color)] hover:underline ml-1">
-                  If there is no logo, click here to make one.
+                  If there is no logo,<span className="text-pink-500 ml-2">click here to make one.</span>
                 </a>
               </p>
             </div>
@@ -451,7 +490,7 @@ const RegistrationForm = () => {
                 onChange={handleChange}
                 required
                 className={`w-full px-4 py-2 border ${errors.street ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                placeholder="e.g., 123, Sector 5, Vashi"
+                placeholder="e.g., 123, Sector 5, Vashi (will be used in your design)"
               />
               {errors.street && <p className="mt-1 text-sm text-red-500 error-message">{errors.street}</p>}
             </div>
@@ -547,7 +586,7 @@ const RegistrationForm = () => {
                   onChange={handleChange}
                   required
                   className={`w-full px-4 py-2 border ${errors.contactPersonName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                  placeholder="e.g., Rajesh Sharma"
+                  placeholder="e.g., Rajesh Sharma (will be used in design)"
                 />
                 {errors.contactPersonName && <p className="mt-1 text-sm text-red-500 error-message">{errors.contactPersonName}</p>}
               </div>
@@ -590,7 +629,7 @@ const RegistrationForm = () => {
                 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}
               `}
             >
-              {isSubmitting ? 'Registering...' : 'Register Now'}
+              {isSubmitting ? 'Registering...' : 'Continue to Confirm Details'}
             </motion.button>
           </div>
         </motion.form>
