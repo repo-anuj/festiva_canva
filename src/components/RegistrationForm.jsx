@@ -27,12 +27,12 @@ const BUSINESS_CATEGORIES = [
 
 // Indian states
 const INDIAN_STATES = [
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", 
-  "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", 
-  "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", 
-  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", 
-  "Uttarakhand", "West Bengal", "Delhi", "Jammu and Kashmir", "Ladakh", 
-  "Puducherry", "Lakshadweep", "Chandigarh", "Andaman and Nicobar Islands", 
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat",
+  "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh",
+  "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh",
+  "Uttarakhand", "West Bengal", "Delhi", "Jammu and Kashmir", "Ladakh",
+  "Puducherry", "Lakshadweep", "Chandigarh", "Andaman and Nicobar Islands",
   "Dadra and Nagar Haveli and Daman and Diu"
 ];
 
@@ -55,7 +55,7 @@ const RegistrationForm = () => {
     contactPersonName: '',
     contactPersonWhatsapp: ''
   });
-  
+
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
@@ -81,68 +81,68 @@ const RegistrationForm = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     // Company name validation
     if (!formData.companyName.trim()) {
       newErrors.companyName = "Company name is required";
     }
-    
+
     // Company contact validation
     if (!formData.companyContact.trim()) {
       newErrors.companyContact = "Company contact number is required";
     } else if (!/^[0-9]{10,12}$|^\+?[0-9]{1,3}-[0-9]{10}$|^[0-9]{3,5}-[0-9]{6,8}$/.test(formData.companyContact.replace(/\s/g, ''))) {
       newErrors.companyContact = "Please enter a valid Indian phone number";
     }
-    
+
     // Website validation (optional field)
     if (formData.website && !/^(https?:\/\/)?(www\.)?[a-zA-Z0-9]+([-.][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}(\/.*)?$/.test(formData.website)) {
       newErrors.website = "Please enter a valid website URL";
     }
-    
+
     // Business category validation
     if (!formData.businessCategory) {
       newErrors.businessCategory = "Please select a business category";
     }
-    
+
     // Address validation
     if (!formData.street.trim()) {
       newErrors.street = "Street address is required";
     }
-    
+
     if (!formData.city.trim()) {
       newErrors.city = "City is required";
     } else if (!/^[a-zA-Z\s]+$/.test(formData.city)) {
       newErrors.city = "City should contain only letters";
     }
-    
+
     if (!formData.state) {
       newErrors.state = "Please select a state";
     }
-    
+
     if (!formData.pincode.trim()) {
       newErrors.pincode = "PIN code is required";
     } else if (!/^[1-9][0-9]{5}$/.test(formData.pincode)) {
       newErrors.pincode = "PIN code must be 6 digits and start with a non-zero digit";
     }
-    
+
     // Contact person validation
     if (!formData.contactPersonName.trim()) {
       newErrors.contactPersonName = "Contact person name is required";
     }
-    
+
     if (!formData.contactPersonWhatsapp.trim()) {
       newErrors.contactPersonWhatsapp = "WhatsApp number is required";
     } else if (!/^[6-9][0-9]{9}$/.test(formData.contactPersonWhatsapp)) {
       newErrors.contactPersonWhatsapp = "Please enter a valid 10-digit Indian mobile number";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       // Scroll to the first error
       const firstErrorField = document.querySelector('.error-message');
@@ -151,7 +151,7 @@ const RegistrationForm = () => {
       }
       return;
     }
-    
+
     // Show confirmation screen instead of submitting directly
     setShowConfirmation(true);
   };
@@ -160,11 +160,11 @@ const RegistrationForm = () => {
   const handleConfirmSubmit = async () => {
     setIsSubmitting(true);
     setSubmitStatus(null);
-    
+
     try {
       // In a real implementation, you would handle file upload separately
       // For now, we'll just simulate the process
-      
+
       const templateParams = {
         to_email: formData.contactPersonWhatsapp + '@c.us', // WhatsApp email gateway format
         from_name: 'FestivaSocial',
@@ -197,13 +197,13 @@ const RegistrationForm = () => {
     }
   };
 
-   // If confirmation is shown
-   if (showConfirmation) {
+  // If confirmation is shown
+  if (showConfirmation) {
     return (
-      <RegistrationConfirmation 
-        formData={formData} 
-        logoPreview={logoPreview} 
-        onConfirm={handleConfirmSubmit} 
+      <RegistrationConfirmation
+        formData={formData}
+        logoPreview={logoPreview}
+        onConfirm={handleConfirmSubmit}
         onEdit={() => setShowConfirmation(false)}
       />
     );
@@ -215,7 +215,7 @@ const RegistrationForm = () => {
       ...prevData,
       [name]: value
     }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors({
@@ -228,44 +228,83 @@ const RegistrationForm = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Check if file is PNG or JPEG and under 5MB
-      const validTypes = ['image/png', 'image/jpeg'];
+      const validTypes = ['image/png'];
       const maxSize = 5 * 1024 * 1024; // 5MB
-      
+
       if (!validTypes.includes(file.type)) {
         setErrors({
           ...errors,
-          logo: "Please upload PNG or JPEG image only"
+          logo: 'Please upload a PNG image only',
         });
+        setLogoPreview(null);
         return;
       }
-      
+
       if (file.size > maxSize) {
         setErrors({
           ...errors,
-          logo: "File size should be less than 5MB"
+          logo: 'File size should be less than 5MB',
         });
+        setLogoPreview(null);
         return;
       }
-      
-      setFormData(prevData => ({
-        ...prevData,
-        logo: file
-      }));
-      
-      // Clear logo error
-      if (errors.logo) {
-        setErrors({
-          ...errors,
-          logo: ''
-        });
-      }
-      
-      // Create preview URL
+
+      const img = new Image();
       const reader = new FileReader();
+
       reader.onloadend = () => {
+        img.src = reader.result;
         setLogoPreview(reader.result);
       };
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        let hasTransparency = false;
+        for (let i = 3; i < data.length; i += 4) {
+          if (data[i] < 255) {
+            hasTransparency = true;
+            break;
+          }
+        }
+
+        if (!hasTransparency) {
+          setErrors({
+            ...errors,
+            logo: 'Please upload a PNG image with a transparent background',
+          });
+          setLogoPreview(null);
+          return;
+        }
+
+        setFormData((prevData) => ({
+          ...prevData,
+          logo: file,
+        }));
+
+        if (errors.logo) {
+          setErrors({
+            ...errors,
+            logo: '',
+          });
+        }
+      };
+
+      img.onerror = () => {
+        setErrors({
+          ...errors,
+          logo: 'Error loading image. Please try again.',
+        });
+        setLogoPreview(null);
+      };
+
       reader.readAsDataURL(file);
     }
   };
@@ -273,8 +312,8 @@ const RegistrationForm = () => {
   // Animation variants for Framer Motion
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: { duration: 0.6 }
     }
@@ -287,7 +326,7 @@ const RegistrationForm = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-200 via-pink-100 to-white flex items-center justify-center px-4 py-12 font-['Inter']">
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -299,25 +338,25 @@ const RegistrationForm = () => {
             variants={fadeIn}
             className="mb-2"
           >
-           <img 
+            <img
               src={logo}
               alt="Festiva Logo"
               className="h-16 mx-auto"
             />
           </motion.div>
-          <motion.h1 
+          <motion.h1
             variants={fadeIn}
             className="text-2xl font-bold text-[var(--text-dark)] mb-2 font-['Playfair_Display']"
           >
             Business Registration
           </motion.h1>
-          <motion.p 
+          <motion.p
             variants={fadeIn}
             className="text-gray-600"
           >
             Crafting Memorable Celebrations for Your Business
           </motion.p>
-          <motion.p 
+          <motion.p
             variants={fadeIn}
             className="text-gray-600 mt-2 text-sm italic"
           >
@@ -326,13 +365,13 @@ const RegistrationForm = () => {
         </div>
 
         {/* Form Section */}
-        <motion.form 
+        <motion.form
           onSubmit={handleSubmit}
           className="bg-white rounded-lg shadow-lg p-8 animate-fade-in"
         >
           {/* Error Message */}
           {submitStatus === 'error' && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="mb-6 p-4 bg-red-100 text-red-700 rounded-md"
@@ -343,11 +382,11 @@ const RegistrationForm = () => {
 
           <div className="space-y-6">
             <h2 className="text-xl font-medium text-[var(--text-dark)] mb-4 font-['Playfair_Display']">Business Information</h2>
-            
+
             {/* Company Name Field */}
             <div>
-              <label 
-                htmlFor="companyName" 
+              <label
+                htmlFor="companyName"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
                 Company Name<span className="text-red-500">*</span>
@@ -369,8 +408,8 @@ const RegistrationForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Company Contact Field */}
               <div>
-                <label 
-                  htmlFor="companyContact" 
+                <label
+                  htmlFor="companyContact"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Company Contact Number<span className="text-red-500">*</span>
@@ -390,8 +429,8 @@ const RegistrationForm = () => {
 
               {/* Website Field */}
               <div>
-                <label 
-                  htmlFor="website" 
+                <label
+                  htmlFor="website"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Website
@@ -411,8 +450,8 @@ const RegistrationForm = () => {
 
             {/* Business Category Field */}
             <div>
-              <label 
-                htmlFor="businessCategory" 
+              <label
+                htmlFor="businessCategory"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
                 Business Category<span className="text-red-500">*</span>
@@ -435,18 +474,15 @@ const RegistrationForm = () => {
 
             {/* Logo Upload Field */}
             <div>
-              <label 
-                htmlFor="logo" 
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Company Logo (PNG without background preferred)
+              <label htmlFor="logo" className="block text-sm font-medium text-gray-700 mb-1">
+                Company Logo (PNG with transparent background required)
               </label>
               <div className="mt-1 flex items-center">
                 <input
                   type="file"
                   id="logo"
                   name="logo"
-                  accept="image/png, image/jpeg"
+                  accept="image/png"
                   onChange={handleFileChange}
                   className="hidden"
                 />
@@ -464,20 +500,20 @@ const RegistrationForm = () => {
               </div>
               {errors.logo && <p className="mt-1 text-sm text-red-500 error-message">{errors.logo}</p>}
               <p className="mt-1 text-xs text-gray-500">
-                Note: Please upload image without background (PNG). This logo will be featured in your designs.
+                Note: Please upload a PNG image with a transparent background. This logo will be featured in your designs.
                 <a href="https://www.remove.bg/" target="_blank" rel="noopener noreferrer" className="text-[var(--primary-color)] hover:underline ml-1">
-                  If there is no logo,<span className="text-pink-500 ml-2">click here to make one.</span>
+                  If there is no logo, <span className="text-pink-500 ml-2">click here to make one.</span>
                 </a>
               </p>
             </div>
 
             {/* Address Section */}
             <h2 className="text-xl font-medium text-[var(--text-dark)] mt-6 mb-4 font-['Playfair_Display']">Business Address</h2>
-            
+
             {/* Street Field */}
             <div>
-              <label 
-                htmlFor="street" 
+              <label
+                htmlFor="street"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
                 Street/Locality<span className="text-red-500">*</span>
@@ -499,8 +535,8 @@ const RegistrationForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* City Field */}
               <div>
-                <label 
-                  htmlFor="city" 
+                <label
+                  htmlFor="city"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   City<span className="text-red-500">*</span>
@@ -520,8 +556,8 @@ const RegistrationForm = () => {
 
               {/* State Field */}
               <div>
-                <label 
-                  htmlFor="state" 
+                <label
+                  htmlFor="state"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   State<span className="text-red-500">*</span>
@@ -544,8 +580,8 @@ const RegistrationForm = () => {
 
               {/* Pincode Field */}
               <div>
-                <label 
-                  htmlFor="pincode" 
+                <label
+                  htmlFor="pincode"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   PIN Code<span className="text-red-500">*</span>
@@ -567,13 +603,13 @@ const RegistrationForm = () => {
 
             {/* Contact Person Section */}
             <h2 className="text-xl font-medium text-[var(--text-dark)] mt-6 mb-4 font-['Playfair_Display']">Contact Person Details</h2>
-            
+
             {/* Two Column Layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Contact Person Name Field */}
               <div>
-                <label 
-                  htmlFor="contactPersonName" 
+                <label
+                  htmlFor="contactPersonName"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Contact Person Name<span className="text-red-500">*</span>
@@ -593,8 +629,8 @@ const RegistrationForm = () => {
 
               {/* Contact Person WhatsApp Field */}
               <div>
-                <label 
-                  htmlFor="contactPersonWhatsapp" 
+                <label
+                  htmlFor="contactPersonWhatsapp"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Contact Person WhatsApp Number<span className="text-red-500">*</span>
@@ -635,7 +671,7 @@ const RegistrationForm = () => {
         </motion.form>
 
         {/* Footer Text */}
-        <motion.p 
+        <motion.p
           variants={fadeIn}
           className="text-center mt-4 text-sm text-gray-600 animate-fade-in"
         >
