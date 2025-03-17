@@ -358,7 +358,7 @@ const RegistrationForm = () => {
           </motion.p>
           <motion.p
             variants={fadeIn}
-            className="text-gray-600 mt-2 text-sm italic"
+            className="text-black-600 mt-2 text-sm italic"
           >
             Note: This information will be used in your designs, please enter accurate details.
           </motion.p>
@@ -391,6 +391,7 @@ const RegistrationForm = () => {
               >
                 Company Name<span className="text-red-500">*</span>
               </label>
+              <p className="text-xs text-black-600 mt-1">Enter your company name (this will be used in your design)</p>
               <input
                 type="text"
                 id="companyName"
@@ -399,7 +400,7 @@ const RegistrationForm = () => {
                 onChange={handleChange}
                 required
                 className={`w-full px-4 py-2 border ${errors.companyName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                placeholder="Enter your company name (this will be used in your design)"
+                
               />
               {errors.companyName && <p className="mt-1 text-sm text-red-500 error-message">{errors.companyName}</p>}
             </div>
@@ -414,6 +415,7 @@ const RegistrationForm = () => {
                 >
                   Company Contact Number<span className="text-red-500">*</span>
                 </label>
+                <p className="text-xs text-black-600 mt-1">e.g., 022-27856789 (will be used in design)</p>
                 <input
                   type="tel"
                   id="companyContact"
@@ -422,7 +424,7 @@ const RegistrationForm = () => {
                   onChange={handleChange}
                   required
                   className={`w-full px-4 py-2 border ${errors.companyContact ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                  placeholder="e.g., 022-27856789 (will be used in design)"
+                  
                 />
                 {errors.companyContact && <p className="mt-1 text-sm text-red-500 error-message">{errors.companyContact}</p>}
               </div>
@@ -435,6 +437,7 @@ const RegistrationForm = () => {
                 >
                   Website
                 </label>
+                <p className="text-xs text-black-600 mt-1">e.g., www.yourcompany.com (will be used in design)</p>
                 <input
                   type="url"
                   id="website"
@@ -442,7 +445,7 @@ const RegistrationForm = () => {
                   value={formData.website}
                   onChange={handleChange}
                   className={`w-full px-4 py-2 border ${errors.website ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                  placeholder="e.g., www.yourcompany.com (will be used in design)"
+                  
                 />
                 {errors.website && <p className="mt-1 text-sm text-red-500 error-message">{errors.website}</p>}
               </div>
@@ -518,6 +521,7 @@ const RegistrationForm = () => {
               >
                 Street/Locality<span className="text-red-500">*</span>
               </label>
+              <p className="text-xs text-black-600 mt-1">e.g., 123, Sector 5, Vashi (will be used in your design)</p>
               <input
                 type="text"
                 id="street"
@@ -526,7 +530,7 @@ const RegistrationForm = () => {
                 onChange={handleChange}
                 required
                 className={`w-full px-4 py-2 border ${errors.street ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                placeholder="e.g., 123, Sector 5, Vashi (will be used in your design)"
+                
               />
               {errors.street && <p className="mt-1 text-sm text-red-500 error-message">{errors.street}</p>}
             </div>
@@ -541,6 +545,7 @@ const RegistrationForm = () => {
                 >
                   City<span className="text-red-500">*</span>
                 </label>
+                <p className="text-xs text-gray-600 mt-1">e.g., Mumbai</p>
                 <input
                   type="text"
                   id="city"
@@ -549,7 +554,7 @@ const RegistrationForm = () => {
                   onChange={handleChange}
                   required
                   className={`w-full px-4 py-2 border ${errors.city ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                  placeholder="e.g., Mumbai"
+                  
                 />
                 {errors.city && <p className="mt-1 text-sm text-red-500 error-message">{errors.city}</p>}
               </div>
@@ -586,6 +591,7 @@ const RegistrationForm = () => {
                 >
                   PIN Code<span className="text-red-500">*</span>
                 </label>
+                <p className="text-xs text-gray-600 mt-1">e.g., 400703</p>
                 <input
                   type="text"
                   id="pincode"
@@ -595,7 +601,7 @@ const RegistrationForm = () => {
                   required
                   maxLength="6"
                   className={`w-full px-4 py-2 border ${errors.pincode ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                  placeholder="e.g., 400703"
+                  
                 />
                 {errors.pincode && <p className="mt-1 text-sm text-red-500 error-message">{errors.pincode}</p>}
               </div>
@@ -614,6 +620,7 @@ const RegistrationForm = () => {
                 >
                   Contact Person Name<span className="text-red-500">*</span>
                 </label>
+                <p className="text-xs text-black-600 mt-1">e.g., Rajesh Sharma (will be used in design)</p>
                 <input
                   type="text"
                   id="contactPersonName"
@@ -622,7 +629,7 @@ const RegistrationForm = () => {
                   onChange={handleChange}
                   required
                   className={`w-full px-4 py-2 border ${errors.contactPersonName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                  placeholder="e.g., Rajesh Sharma (will be used in design)"
+                  
                 />
                 {errors.contactPersonName && <p className="mt-1 text-sm text-red-500 error-message">{errors.contactPersonName}</p>}
               </div>
@@ -635,6 +642,7 @@ const RegistrationForm = () => {
                 >
                   Contact Person WhatsApp Number<span className="text-red-500">*</span>
                 </label>
+                <p className="text-xs text-gray-600 mt-1">e.g., 9876543210</p>
                 <input
                   type="tel"
                   id="contactPersonWhatsapp"
@@ -644,7 +652,7 @@ const RegistrationForm = () => {
                   required
                   maxLength="10"
                   className={`w-full px-4 py-2 border ${errors.contactPersonWhatsapp ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition`}
-                  placeholder="e.g., 9876543210"
+                  
                 />
                 {errors.contactPersonWhatsapp && <p className="mt-1 text-sm text-red-500 error-message">{errors.contactPersonWhatsapp}</p>}
                 <p className="mt-1 text-xs text-gray-500">

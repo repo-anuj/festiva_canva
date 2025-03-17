@@ -69,22 +69,22 @@ const FestivaGallery = () => {
         <div className="text-center mb-12">
           <h2 className="text-3xl font-serif mb-3">
             Create your perfect festival moments with
-            <span className="text-pink-500 ml-2">Festiva</span>
+            <span className="text-pink-500 ml-2">Festiva Social</span>
           </h2>
           <p className="text-gray-600">
             Browse through our curated collection and click any design to download
           </p>
         </div>
 
-        {/* Gallery Grid - New Style with Buttons Below Images */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
+        {/* Gallery Grid - Exactly 3 columns on all screen sizes */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6 mb-12">
           {images.map((image) => (
             <div 
               key={image.id} 
-              className="flex flex-col bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
+              className="flex flex-col bg-white rounded-lg sm:rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
             >
-              {/* Image Container */}
-              <div className="aspect-[9/16] relative cursor-pointer">
+              {/* Image Container - Adjusted for consistent sizing */}
+              <div className="aspect-[2/3] sm:aspect-[3/4] md:aspect-[9/16] relative cursor-pointer">
                 <img
                   src={image.src}
                   alt={image.alt}
@@ -93,17 +93,17 @@ const FestivaGallery = () => {
                 />
               </div>
               
-              {/* Buttons Below Image */}
-              <div className="p-2 flex gap-2 justify-center">
+              {/* Buttons - Responsive design for all screen sizes */}
+              <div className="p-1 sm:p-2 flex flex-col xs:flex-row gap-1 justify-center">
                 <button 
                   onClick={() => handleImageClick(image.id)}
-                  className="px-8 py-2 bg-pink-200 text-pink-700 rounded-md font-medium hover:bg-pink-300 transition-all duration-200 text-sm"
+                  className="px-1 sm:px-3 md:px-6 py-1 md:py-2 bg-pink-200 text-pink-700 rounded text-xs sm:text-sm font-medium hover:bg-pink-300 transition-all duration-200 whitespace-nowrap overflow-hidden text-ellipsis"
                 >
                   Preview
                 </button>
                 <button 
                   onClick={() => handleDownload(image.id)}
-                  className="px-8 py-2 bg-pink-500 text-white rounded-md font-medium hover:bg-pink-600 transition-all duration-200 text-sm"
+                  className="px-1 sm:px-3 md:px-6 py-1 md:py-2 bg-pink-500 text-white rounded text-xs sm:text-sm font-medium hover:bg-pink-600 transition-all duration-200 whitespace-nowrap overflow-hidden text-ellipsis"
                 >
                   Download
                 </button>
@@ -115,28 +115,35 @@ const FestivaGallery = () => {
         {/* Modal for Preview */}
         {selectedImage && (
           <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-            <div className="relative max-w-80 w-full bg-white rounded-xl overflow-hidden">
+            <div className="relative w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl bg-white rounded-xl overflow-hidden">
               <button 
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-2 right-2 text-gray-700 hover:text-pink-500 transition-colors p-2 bg-white bg-opacity-70 rounded-full z-10"
+                className="absolute top-2 right-2 text-gray-700 hover:text-pink-500 transition-colors p-1 sm:p-2 bg-white bg-opacity-70 rounded-full z-10"
               >
-                <X className="w-6 h-6" />
+                <X className="w-4 h-4 sm:w-6 sm:h-6" />
               </button>
               
-              <img
-                src={images.find(img => img.id === selectedImage)?.src}
-                alt={images.find(img => img.id === selectedImage)?.alt}
-                className="w-full h-auto"
-              />
-              
-              <div className="p-4 flex justify-center">
-                <button 
-                  onClick={() => handleDownload(selectedImage)}
-                  className="px-6 py-2 bg-pink-500 text-white rounded-md font-medium hover:bg-pink-600 transition-all duration-200 flex items-center gap-2"
-                >
-                  <Download className="w-5 h-5" />
-                  <span>Download Now</span>
-                </button>
+              <div className="flex flex-col md:flex-row">
+                <div className="md:w-2/3">
+                  <img
+                    src={images.find(img => img.id === selectedImage)?.src}
+                    alt={images.find(img => img.id === selectedImage)?.alt}
+                    className="w-full h-auto"
+                  />
+                </div>
+                
+                <div className="p-3 md:p-4 md:w-1/3 flex flex-col justify-center">
+                  {/* <h3 className="text-base sm:text-lg font-medium mb-2">
+                    {images.find(img => img.id === selectedImage)?.alt}
+                  </h3> */}
+                  <button 
+                    onClick={() => handleDownload(selectedImage)}
+                    className="px-4 sm:px-6 py-1 sm:py-2 bg-pink-500 text-white rounded-md font-medium hover:bg-pink-600 transition-all duration-200 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm"
+                  >
+                    <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span>Download Now</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -144,17 +151,17 @@ const FestivaGallery = () => {
 
         {/* How it Works Section */}
         <div className="max-w-2xl mx-auto mb-16">
-          <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300">
-            <h2 className="text-xl font-serif mb-3 text-center">
+          <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md hover:shadow-lg transition-shadow duration-300">
+            <h2 className="text-lg sm:text-xl font-serif mb-3 text-center">
               How it <span className="text-pink-500">works</span>?
             </h2>
-            <div className="text-gray-600 text-center text-sm space-y-2">
+            <div className="text-gray-600 text-center text-xs sm:text-sm space-y-2">
               <p className="flex items-center justify-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-pink-100 flex items-center justify-center text-pink-500">1</span>
+                <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 text-xs sm:text-sm">1</span>
                 Click on Preview to see the full design
               </p>
               <p className="flex items-center justify-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-pink-100 flex items-center justify-center text-pink-500">2</span>
+                <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 text-xs sm:text-sm">2</span>
                 Click the Download button to buy your design 
               </p>
             </div>
