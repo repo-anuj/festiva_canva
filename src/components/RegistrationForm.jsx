@@ -358,7 +358,7 @@ const RegistrationForm = () => {
           </motion.p>
           <motion.p
             variants={fadeIn}
-            className="text-black-600 mt-2 text-sm italic"
+            className="text-gray-600 mt-2 text-sm italic"
           >
             Note: This information will be used in your designs, please enter accurate details.
           </motion.p>
@@ -391,7 +391,7 @@ const RegistrationForm = () => {
               >
                 Company Name<span className="text-red-500">*</span>
               </label>
-              <p className="text-xs text-black-600 mt-1">Enter your company name (this will be used in your design)</p>
+              <p className="text-xs text-gray-600 mt-1">Enter your company name (this will be used in your design)</p>
               <input
                 type="text"
                 id="companyName"
@@ -415,7 +415,7 @@ const RegistrationForm = () => {
                 >
                   Company Contact Number<span className="text-red-500">*</span>
                 </label>
-                <p className="text-xs text-black-600 mt-1">e.g., 022-27856789 (will be used in design)</p>
+                <p className="text-xs text-gray-600 mt-1">e.g., 022-27856789 (will be used in design)</p>
                 <input
                   type="tel"
                   id="companyContact"
@@ -437,7 +437,7 @@ const RegistrationForm = () => {
                 >
                   Website
                 </label>
-                <p className="text-xs text-black-600 mt-1">e.g., www.yourcompany.com (will be used in design)</p>
+                <p className="text-xs text-gray-600 mt-1">e.g., www.yourcompany.com (will be used in design)</p>
                 <input
                   type="url"
                   id="website"
@@ -521,7 +521,7 @@ const RegistrationForm = () => {
               >
                 Street/Locality<span className="text-red-500">*</span>
               </label>
-              <p className="text-xs text-black-600 mt-1">e.g., 123, Sector 5, Vashi (will be used in your design)</p>
+              <p className="text-xs text-gray-600 mt-1">e.g., 123, Sector 5, Vashi (will be used in your design)</p>
               <input
                 type="text"
                 id="street"
@@ -620,7 +620,7 @@ const RegistrationForm = () => {
                 >
                   Contact Person Name<span className="text-red-500">*</span>
                 </label>
-                <p className="text-xs text-black-600 mt-1">e.g., Rajesh Sharma (will be used in design)</p>
+                <p className="text-xs text-gray-600 mt-1">e.g., Rajesh Sharma (will be used in design)</p>
                 <input
                   type="text"
                   id="contactPersonName"
