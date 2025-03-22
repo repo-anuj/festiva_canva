@@ -620,7 +620,7 @@ const RegistrationForm = () => {
                 >
                   Contact Person Name<span className="text-red-500">*</span>
                 </label>
-                <p className="text-xs text-gray-600 mt-1">e.g., Rajesh Sharma (will be used in design)</p>
+                <p className="text-xs text-gray-600 mt-1">e.g., Rajesh Sharma (For future communicationn)</p>
                 <input
                   type="text"
                   id="contactPersonName"
